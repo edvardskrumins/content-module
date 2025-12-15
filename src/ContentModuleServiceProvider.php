@@ -14,6 +14,8 @@ class ContentModuleServiceProvider extends ServiceProvider
         $this->publishesMigrations([
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ]);
+        
+        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
     }
 }
 
