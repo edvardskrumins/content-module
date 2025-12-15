@@ -2,6 +2,7 @@
 
 namespace TetOtt\ContentModule;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -15,7 +16,9 @@ class ContentModuleServiceProvider extends ServiceProvider
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ]);
         
-        $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        Route::prefix('api')->group(function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
     }
 }
 
