@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateContentRequest;
 use App\Http\Resources\ContentResource;
 use App\Http\Resources\ContentResourceCollection;
 use App\Models\Content;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
@@ -15,9 +16,9 @@ class ContentController extends Controller
     /**
      * Display a listing of contents.
      */
-    public function index(): ContentResourceCollection
+    public function index(Request $request): ContentResourceCollection
     {
-        $contents = Content::all();
+        $contents = Content::paginate($request->get('per_page', 15));
 
         return new ContentResourceCollection($contents);
     }

@@ -2,15 +2,22 @@
     "$schema": "https://getcomposer.org/schema.json",
     "name": "tet-ott/content-module",
     "type": "project",
-    "description": "Content Management Module for OTT platform - manages videos, series, genres, and metadata",
-    "keywords": ["laravel", "package", "ott", "content", "video", "streaming"],
+    "description": "Content Management Module for OTT platform",
+    "keywords": ["laravel"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/octane": "^2.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "tet-ott/helper-module": "dev-main"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/edvardskrumins/helper-module.git"
+        }
+    ],
     "require-dev": {
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.2.2",
@@ -87,6 +94,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

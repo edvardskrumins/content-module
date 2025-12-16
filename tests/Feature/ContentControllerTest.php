@@ -29,9 +29,9 @@ class ContentControllerTest extends TestCase
 
 
     /**
-     * Test index method returns all contents.
+     * Test index method returns paginated contents.
      */
-    public function testIndexReturnsAllContents(): void
+    public function testIndexReturnsPaginatedContents(): void
     {
         $contents = Content::factory()->count(3)->create();
 
@@ -41,9 +41,25 @@ class ContentControllerTest extends TestCase
                 'data' => [
                     '*' => self::CONTENT_RESOURCE_STRUCTURE['data']
                 ],
+                'links' => [
+                    'first',
+                    'last',
+                    'prev',
+                    'next',
+                ],
+                'meta' => [
+                    'current_page',
+                    'from',
+                    'last_page',
+                    'path',
+                    'per_page',
+                    'to',
+                    'total',
+                ],
             ]);
 
         $this->assertCount(3, $response->json('data'));
+        $this->assertEquals(3, $response->json('meta.total'));
     }
 
     /**
@@ -53,7 +69,31 @@ class ContentControllerTest extends TestCase
     {
         $response = $this->getJson('/api/content-module/contents');
         $response->assertStatus(HttpResponse::HTTP_OK)
-            ->assertJson(['data' => []]);
+            ->assertJsonStructure([
+                'data' => [],
+                'links',
+                'meta',
+            ])
+            ->assertJson([
+                'data' => [],
+                'meta' => [
+                    'total' => 0,
+                ],
+            ]);
+    }
+
+    /**
+     * Test index method respects per_page parameter.
+     */
+    public function testIndexRespectsPerPageParameter(): void
+    {
+        Content::factory()->count(25)->create();
+
+        $response = $this->getJson('/api/content-module/contents?per_page=10');
+        $response->assertStatus(HttpResponse::HTTP_OK);
+        $this->assertCount(10, $response->json('data'));
+        $this->assertEquals(10, $response->json('meta.per_page'));
+        $this->assertEquals(25, $response->json('meta.total'));
     }
 
     /**
